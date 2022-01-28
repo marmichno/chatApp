@@ -4,8 +4,8 @@ import { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 // components
-import { Rooms } from './screens/rooms/Rooms';
-import { Chat } from './screens/chat/Chat';
+import { RoomsScreen } from './screens/rooms/RoomsScreen';
+import { ChatScreen } from './screens/chat/ChatScreen';
 import AppLoading from 'expo-app-loading';
 // fonts
 import * as Font from 'expo-font';
@@ -18,6 +18,13 @@ import {
 } from "@apollo/client";
 import { setContext } from '@apollo/client/link/context';
 
+type RootStackParamList = {
+  Rooms: undefined;
+  Chat: { roomId: string };
+};
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
+
 const getFonts = () => Font.loadAsync({
   'poppins-bold': require('./assets/fonts/Poppins-Bold.ttf'),
   'poppins-semiBold': require('./assets/fonts/Poppins-SemiBold.ttf'),
@@ -28,10 +35,8 @@ const getFonts = () => Font.loadAsync({
   'sf-compact-displayBold': require('./assets/fonts/SF-Compact-DisplayBold.ttf')
 });
 
-const Stack = createNativeStackNavigator();
-
 const httpLink = createHttpLink({
-  uri: 'uri',
+  uri: '',
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -63,11 +68,11 @@ export default function App() {
           >
             <Stack.Screen
               name="Rooms"
-              component={Rooms}
+              component={RoomsScreen}
             />
             <Stack.Screen
               name="Chat"
-              component={Chat}
+              component={ChatScreen}
             />
           </Stack.Navigator>
         </NavigationContainer>

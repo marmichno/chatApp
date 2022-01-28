@@ -1,6 +1,6 @@
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View } from 'react-native';
 // styles
-import { variables } from '../../../shared/styles/variables';
+import styles from "./stylesRoom";
 import { typography } from '../../../shared/styles/global';
 // svg
 import ProfileSvg from '../../../assets/ProfileSvg';
@@ -9,6 +9,8 @@ import OnlineSvg from '../../../assets/OnlineSvg';
 import { useQuery } from '@apollo/client';
 // queries
 import GET_ROOMS_MESSAGES_DATA from '../../../queries/getRoomMessagesData';
+// functions
+import {shortenText} from '../../../shared/functions/shortenText';
 
 interface Room {
     "roomId": string,
@@ -31,7 +33,6 @@ export const Room = ({ roomId, roomName }: Room) => {
     // since I have no way to tell who is online now I hard coded roomId to get preview on online styles.
 
     const compareDates = (date: string) => {
-        console.log(date);
         const d = new Date()
         const todayDate = d.toISOString().split('T')[0];
         const time = d.toTimeString().split(' ')[0];
@@ -46,9 +47,9 @@ export const Room = ({ roomId, roomName }: Room) => {
             m = Math.floor((ms / 1000 / 60 / 60 - h) * 60);
             s = Math.floor(((ms / 1000 / 60 / 60 - h) * 60 - m) * 60);
 
-            if(h > 24){
+            if(h - 1 > 24){
                 return 'more than a day ago';
-            }else if(h < 24 && h !== 0){
+            }else if(h - 1 < 24 && h - 1 !== 0){
                 return `${h < 10 ? h = `0${h}`: h = `${h}`} hours ago`
             } else if(m !== 0){
                 return `${m < 10 ? m = `0${m}`: m = `${m}`} minutes ago`;
@@ -91,7 +92,7 @@ export const Room = ({ roomId, roomName }: Room) => {
                                 :
                                 styles.roomNameOffline]}>
                             {/* shorten roomName to 30 characters */}
-                            {roomName.length > 30 ? roomName.replace(/(.{30})..+/, "$1...") : roomName}
+                            {shortenText(30, roomName)}
                         </Text>
                         <Text
                             style={[typography.bodyText, styles.lastMessage,
@@ -100,7 +101,7 @@ export const Room = ({ roomId, roomName }: Room) => {
                                 :
                                 styles.lastMessageOffline]}>
                             {/* shorten last message to 30 characters */}
-                            {data.room.messages[0].body.length > 30 ? data.room.messages[0].body.replace(/(.{30})..+/, "$1...") : data.room.messages[0].body}
+                            {shortenText(30, data.room.messages[0].body)}
                         </Text>
                     </View>
                 </View>
@@ -112,77 +113,3 @@ export const Room = ({ roomId, roomName }: Room) => {
         )
     }
 }
-
-const styles = StyleSheet.create({
-    userRoomsContainer: {
-        flex: 1,
-        backgroundColor: `${variables.backgroundColor}`,
-        top: 36
-    },
-    flatListContainer: {
-        flex: 1
-    },
-    roomContainer: {
-        width: '100%',
-        height: 88,
-        borderRadius: 12,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginBottom: 12,
-    },
-    roomContainerOnline: {
-        backgroundColor: `${variables.highlightColor}`,
-    },
-    roomContainerOffline: {
-        backgroundColor: `white`,
-    },
-    avatarContainer: {
-        width: '25%',
-        height: '100%',
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    descriptionContainer: {
-        height: '100%',
-        width: '75%'
-    },
-    lastOnlineContainer: {
-        width: '100%',
-        height: '25%',
-        justifyContent: 'flex-end',
-        alignItems: 'flex-end',
-        paddingRight: 12
-    },
-    lastOnlineContainerText: {
-        color: '#9FA2B2',
-        fontSize: 13
-    },
-    messageAndNameContainer: {
-        flex: 1,
-        width: '100%',
-        height: '75%',
-        alignItems: 'flex-start',
-        justifyContent: 'flex-start'
-    },
-    roomName: {
-        fontSize: 15
-    },
-    roomNameOnline: {
-        color: 'white'
-    },
-    roomNameOffline: {
-        color: 'black'
-    },
-    lastMessage: {
-        fontFamily: "SF Compact Text",
-        fontStyle: "normal",
-        fontWeight: "normal"
-    },
-    lastMessageOnline: {
-        color: "#F0F8FF"
-    },
-    lastMessageOffline: {
-        color: "black"
-    }
-})

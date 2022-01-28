@@ -1,7 +1,7 @@
 import * as React from "react"
 import Svg, { SvgProps, Circle, Path } from "react-native-svg"
 
-const SvgComponent = (props: SvgProps) => (
+const PhoneSvg = (props: SvgProps) => (
   <Svg
     width={44}
     height={44}
@@ -16,4 +16,4 @@ const SvgComponent = (props: SvgProps) => (
   </Svg>
 )
 
-export default SvgComponent
+export default PhoneSvg
