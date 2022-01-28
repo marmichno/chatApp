@@ -1,7 +1,6 @@
-import { Text, View, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { Text, View, FlatList, TouchableOpacity } from 'react-native';
 // styles
-import { globalStyles } from '../../shared/styles/global';
-import { variables } from '../../shared/styles/variables';
+import styles from './stylesRoomsScreen';
 // components
 import { RoomsHeader } from './header/RoomsHeader';
 import { Room } from './room/Room';
@@ -9,6 +8,15 @@ import { Room } from './room/Room';
 import { useQuery } from '@apollo/client';
 // queries
 import { GET_ROOMS } from '../../queries/getRooms';
+// navigation
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+
+type RootStackParamList = {
+    Rooms: undefined;
+    Chat: { roomId: string };
+};
+
+type Props = NativeStackScreenProps<RootStackParamList, 'Rooms'>;
 
 interface Rooms {
     "usersRooms": {
@@ -19,12 +27,14 @@ interface Rooms {
         }[]
     }
 }
+
 interface Room {
     "id": string,
     "name": string
 }
 
-export const Rooms = ({ navigation }: any) => {
+export const RoomsScreen = ({ navigation }: Props) => {
+
     const { loading, error, data } = useQuery<Rooms>(GET_ROOMS);
 
     const renderSwitch = () => {
@@ -52,7 +62,7 @@ export const Rooms = ({ navigation }: any) => {
                         keyExtractor={(item: Room) => item.id}
                         data={data.usersRooms.rooms}
                         renderItem={({ item }: { item: Room }) => (
-                            <TouchableOpacity onPress={() => navigation.navigate('Chat', {roomId: item.id})}>
+                            <TouchableOpacity onPress={() => navigation.navigate('Chat', { roomId: item.id })}>
                                 <Room roomId={item.id} roomName={item.name} />
                             </TouchableOpacity>
                         )}
@@ -63,23 +73,11 @@ export const Rooms = ({ navigation }: any) => {
     }
 
     return (
-        <>
+        <View style={styles.screenContainer}>
             <RoomsHeader />
             <View style={styles.bodyContainer}>
                 {renderSwitch()}
             </View>
-        </>
+        </View>
     )
 }
-
-const styles = StyleSheet.create({
-    bodyContainer: {
-        flex: 1,
-        backgroundColor: `${variables.backgroundColor}`
-    },
-    roomsContainer: {
-        flex: 1,
-        marginTop: 36,
-        backgroundColor: `${variables.backgroundColor}`
-    }
-})
