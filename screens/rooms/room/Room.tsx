@@ -10,7 +10,7 @@ import { useQuery } from '@apollo/client';
 // queries
 import GET_ROOMS_MESSAGES_DATA from '../../../queries/getRoomMessagesData';
 // functions
-import {shortenText} from '../../../shared/functions/shortenText';
+import { shortenText } from '../../../shared/functions/shortenText';
 
 interface Room {
     "roomId": string,
@@ -33,13 +33,8 @@ export const Room = ({ roomId, roomName }: Room) => {
     // since I have no way to tell who is online now I hard coded roomId to get preview on online styles.
 
     const compareDates = (date: string) => {
-        const d = new Date()
-        const todayDate = d.toISOString().split('T')[0];
-        const time = d.toTimeString().split(' ')[0];
-        let comparableTodayDate = `${todayDate} ${time}`;
-        let todayDateInMs = new Date(comparableTodayDate.replace(/-/g, '/')).getTime();
-        let comparedDateInMs = new Date(date.replace(/-/g, '/')).getTime();
-        let msDiffrence = todayDateInMs - comparedDateInMs;
+        let comparedDateInMs = new Date(date.replace(/-/g, '/')).getTime() + 3600000;
+        let msDiffrence = Date.now() - comparedDateInMs;
 
         const getTime = (ms: number) => {
             let h, m, s;
@@ -47,18 +42,18 @@ export const Room = ({ roomId, roomName }: Room) => {
             m = Math.floor((ms / 1000 / 60 / 60 - h) * 60);
             s = Math.floor(((ms / 1000 / 60 / 60 - h) * 60 - m) * 60);
 
-            if(h - 1 > 24){
+            if (h > 24) {
                 return 'more than a day ago';
-            }else if(h - 1 < 24 && h - 1 !== 0){
-                return `${h < 10 ? h = `0${h}`: h = `${h}`} hours ago`
-            } else if(m !== 0){
-                return `${m < 10 ? m = `0${m}`: m = `${m}`} minutes ago`;
+            } else if (h < 24 && h < 0) {
+                return `${h < 10 ? h = `0${h}` : h = `${h}`} hours ago`
+            } else if (m !== 0) {
+                return `${m < 10 ? m = `0${m}` : m = `${m}`} minutes ago`;
             } else {
-                return `${s < 10 ? s = `0${s}`: s = `${s}`} seconds ago`;
+                return `${s < 10 ? s = `0${s}` : s = `${s}`} seconds ago`;
             }
         }
 
-        return(getTime(msDiffrence));
+        return (getTime(msDiffrence));
     }
 
     if (loading) {

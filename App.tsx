@@ -36,7 +36,7 @@ const getFonts = () => Font.loadAsync({
 });
 
 const httpLink = createHttpLink({
-  uri: '',
+  uri: 'url',
 });
 
 const authLink = setContext((_, { headers }) => {
