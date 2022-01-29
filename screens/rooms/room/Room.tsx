@@ -44,7 +44,7 @@ export const Room = ({ roomId, roomName }: Room) => {
 
             if (h > 24) {
                 return 'more than a day ago';
-            } else if (h < 24 && h < 0) {
+            } else if (h < 24 && h > 0) {
                 return `${h < 10 ? h = `0${h}` : h = `${h}`} hours ago`
             } else if (m !== 0) {
                 return `${m < 10 ? m = `0${m}` : m = `${m}`} minutes ago`;
