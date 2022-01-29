@@ -1,5 +1,6 @@
 # ChatApp
 
+![chatAppp](https://user-images.githubusercontent.com/72525469/151638165-a2eb42c4-414b-4fa2-9009-242db174c499.gif)
 
 ## About project
 
