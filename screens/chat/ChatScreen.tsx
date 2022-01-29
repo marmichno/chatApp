@@ -36,7 +36,10 @@ export const ChatScreen = ({ navigation }: Props) => {
 
     let roomId = navigation.getState().routes.filter(val => val.name === 'Chat')[0].params?.roomId;
 
-    const { loading, error, data } = useQuery<Room>(GET_ROOM_MESSAGES_DETAILS, { variables: { roomId } });
+    const { loading, error, data } = useQuery<Room>(GET_ROOM_MESSAGES_DETAILS, {
+        variables: { roomId },
+        pollInterval: 5000
+    });
 
     if (loading) {
         return (
@@ -56,7 +59,7 @@ export const ChatScreen = ({ navigation }: Props) => {
         )
     } else if (data) {
         return (
-            <View style={{backgroundColor:"#F0F8FF", flex:1}}>
+            <View style={{ backgroundColor: "#F0F8FF", flex: 1 }}>
                 <ChatHeader navigation={navigation} roomName={data.room.name} />
                 <ChatBody roomMessages={data.room.messages} roomId={roomId} />
                 <ChatFooter />
