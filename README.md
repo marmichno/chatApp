@@ -23,7 +23,7 @@ Chat screen with messages implemented using react-native-gifted-chat.<br>
 And run those comands in project directory:
 ```sh
 git clone https://github.com/marmichno/chatApp.git
-cd chat-app
+cd chatApp
 npm install
 ```
 <h2>NOTE: token and api uri must be provided in lines 47 and 39 in App.tsx</h2>
